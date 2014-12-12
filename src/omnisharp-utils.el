@@ -156,7 +156,8 @@ the curl program. Depends on the operating system."
              (omnisharp--get-curl-command-windows-with-tmp-file url params)
            (omnisharp--get-curl-command-unix url params))))
     (when omnisharp-debug
-      (omnisharp--log-curl-command curl-command))
+      (omnisharp--log-curl-command curl-command)
+      (omnisharp--log (prin1-to-string params)))
     curl-command))
 
 (defun omnisharp--log-curl-command (curl-command)
@@ -193,7 +194,7 @@ communicate with the API."
   `(:command
     ,omnisharp--curl-executable-path
     :arguments
-    ("--ipv4" "--silent" "-H" "Content-type: application/json"
+    ("--ipv4" "--silent" "-H" "Content-type:application/json"
      "--data"
      ,(json-encode params)
      ,url)))

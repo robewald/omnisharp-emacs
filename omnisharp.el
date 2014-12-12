@@ -1250,12 +1250,12 @@ contents with the issue at point fixed."
              "fixcodeissue")
      run-code-action-request)))
 
-(add-to-list 'compilation-error-regexp-alist
-             '(" in \\(.+\\):\\([1-9][0-9]+\\)" 1 2))
+;; (add-to-list 'compilation-error-regexp-alist
+;;              '(" in \\(.+\\):\\([1-9][0-9]+\\)" 1 2))
 
 ;; nunit-console.exe on windows uses this format
-(add-to-list 'compilation-error-regexp-alist
-             '(" in \\(.+\\):line \\([0-9]+\\)" 1 2))
+;; (add-to-list 'compilation-error-regexp-alist
+;;              '(" in \\(.+\\):line \\([0-9]+\\)" 1 2))
 
 (defun omnisharp-unit-test-single ()
   (interactive)
