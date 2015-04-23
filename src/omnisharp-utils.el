@@ -194,7 +194,7 @@ communicate with the API."
   `(:command
     ,omnisharp--curl-executable-path
     :arguments
-    ("--ipv4" "--silent" "-H" "Content-type:application/json"
+    ("--ipv4" "--silent" "-H" "Content-type:application/json" "--connect-timeout" "1"
      "--data"
      ,(json-encode params)
      ,url)))
@@ -214,7 +214,7 @@ api at URL using that file as the parameters."
     `(:command ,omnisharp--curl-executable-path
                :arguments
                ("--noproxy" "localhost"
-                "--silent" "-H" "Content-type: application/json"
+                "--silent" "-H" "Content-type:application/json" "--connect-timeout" "1"
                 "--data-binary"
                 ;; @ specifies a file path to curl
                 ,path-with-curl-prefix
