@@ -46,6 +46,7 @@ server backend."
   (omnisharp--init-imenu-support)
   (omnisharp--init-eldoc-support)
   (omnisharp--start-omnisharp-server-for-solution-in-parent-directory)
+  (setq omnisharp--shell-type (omnisharp--shell-type))
 
   ;; These are selected automatically when flycheck is enabled
   (add-to-list 'flycheck-checkers 'csharp-omnisharp-codecheck))
@@ -814,10 +815,22 @@ If not on windows, returns COMMAND unchanged."
 
 
   (if (equal system-type 'windows-nt)
-      ;; Compiler path fix. C:\Path is interpreted as C:Path
-      (omnisharp--convert-backslashes-to-forward-slashes
-       command)
-
+      (cond ((equal omnisharp--shell-type 'cygwin)
+             ;; Compiler path fix. C:\Path is interpreted as C:Path
+             (omnisharp--convert-backslashes-to-forward-slashes
+              command))
+            ((equal shell-type 'msys)
+             (omnisharp--convert-backslashes-to-forward-slashes
+              ;; Compiler parameter fix. Msys bash thinks "/m" refers to the path
+              ;; /m - that is, (root)/m
+              ;; Note that cygwin behaviour is different.
+              (omnisharp--convert-slashes-to-double-slashes
+               command)))
+            ((equal shell-type 'cmd)
+             command)
+            (t
+             (message "Omnisharp: unknown shell type. Tring anyway")
+             command))
     ;; Not on windows. Do not change.
     command))
 
@@ -1359,6 +1372,12 @@ contents with the issue at point fixed."
              (nth 0 (split-string (cdr (assoc 'Text candidate)) "(")))
      candidate)))
 
+(defun omnisharp--shell-type ()
+  (lexical-let ((version-string (car (split-string (shell-command-to-string "help") "\n"))))
+    (cond
+     ((string-match "msys" version-string) 'msys)
+     ((string-match "cygwin" version-string) 'cygwin)
+     ((string-match "specific command" version-string) 'cmd))))
 (provide 'omnisharp)
 
 ;;; omnisharp.el ends here
