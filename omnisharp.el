@@ -819,14 +819,14 @@ If not on windows, returns COMMAND unchanged."
              ;; Compiler path fix. C:\Path is interpreted as C:Path
              (omnisharp--convert-backslashes-to-forward-slashes
               command))
-            ((equal shell-type 'msys)
+            ((equal omnisharp--shell-type 'msys)
              (omnisharp--convert-backslashes-to-forward-slashes
               ;; Compiler parameter fix. Msys bash thinks "/m" refers to the path
               ;; /m - that is, (root)/m
               ;; Note that cygwin behaviour is different.
               (omnisharp--convert-slashes-to-double-slashes
                command)))
-            ((equal shell-type 'cmd)
+            ((equal omnisharp--shell-type 'cmd)
              command)
             (t
              (message "Omnisharp: unknown shell type. Tring anyway")
